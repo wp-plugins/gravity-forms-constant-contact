@@ -11,13 +11,14 @@ Add contacts to your Constant Contact mailing list when they submit a Gravity Fo
 == Description ==
 
 ###Integrate Constant Contact with Gravity Forms
-If you use Constant Contact email service and the Gravity Forms plugin, you're going to want this plugin!
+If you use Constant Contact email service and the <a href="http://sn.im/gravityforms" rel="nofollow">Gravity Forms plugin</a>, you're going to want this plugin!
 
 Activate this plugin and slightly modify your forms, and you'll be able to add users to your Constant Contact lists.
 
 ####Requirements
+* A <a href="http://bit.ly/tryconstantcontact" rel="nofollow">Constant Contact account</a>
+* The <a href="http://sn.im/gravityforms" rel="nofollow">Gravity Forms plugin</a>
 * [Constant Contact API plugin](http://wordpress.org/extend/plugins/constant-contact-api/)
-* [Gravity Forms plugin](http://www.gravityforms.com)
 * PHP 5
 
 == Installation == 
