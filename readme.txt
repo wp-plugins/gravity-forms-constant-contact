@@ -1,4 +1,4 @@
-=== Gravity Forms + Constant Contact ===
+=== Gravity Forms plus Constant Contact ===
 Tags: gravity forms, forms, gravity, form, crm, gravity form, mail, email, newsletter, Constant Contact, plugin, sidebar, widget, mailing list, API, email marketing, newsletters
 Requires at least: 2.8
 Tested up to: 3.0.1
