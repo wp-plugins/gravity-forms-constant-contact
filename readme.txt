@@ -6,9 +6,11 @@ Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms+Constant%20Contact&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
-Add contacts to your Constant Contact mailing list when they submit a Gravity Forms form.
+Add contacts to your <a href="http://bit.ly/tryconstantcontact" rel="nofollow" target="_blank">Constant Contact</a> mailing list when they submit a <a href="http://sn.im/gravityforms" rel="nofollow" target="_blank">Gravity Forms</a> form.
 
 == Description ==
+
+> This plugin requires a <a href="http://bit.ly/tryconstantcontact" rel="nofollow" target="_blank">Constant Contact account</a> and the <a href="http://sn.im/gravityforms" rel="nofollow" target="_blank">Gravity Forms plugin</a>.
 
 ###Integrate Constant Contact with Gravity Forms
 If you use Constant Contact email service and the <a href="http://sn.im/gravityforms" rel="nofollow">Gravity Forms plugin</a>, you're going to want this plugin!
