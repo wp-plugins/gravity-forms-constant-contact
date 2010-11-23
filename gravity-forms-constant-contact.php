@@ -4,7 +4,7 @@ Plugin Name: Gravity Forms + Constant Contact
 Plugin URI: http://www.seodenver.com/gravity-forms-constant-contact/
 Description: Add contacts to your Constant Contact mailing list when they fill out a Gravity Forms form.
 Author: Katz Web Services, Inc.
-Version: 1.0
+Version: 1.1
 Author URI: http://www.seodenver.com
 
 --------------------------------------------------
@@ -34,31 +34,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 add_action('admin_notices', 'gf_cc_check'); 
 
 function gf_cc_check() {
+	global $pagenow, $page;
+	
+	if($pagenow != 'plugins.php') { return false;}
 	$message = '';
-	if(!function_exists('constant_contact_create_object') || !class_exists('RGForms')) { 
-		$message = '<div id="message" class="error">';
-	}
 	if(!function_exists('constant_contact_create_object')) { 
-		$message .= '<p>You do not have the Constant Contact API plugin enabled. <a href="'.admin_url('plugin-install.php?s=Constant%20Contact%20for%20Wordpress').'">Add it to your site.</a></p>';
+		if(file_exists(WP_PLUGIN_DIR.'/constant-contact-api/constant-contact-api.php')) {
+			$message .= '<p>Constant Contact API is installed. <strong>Activate Constant Contact API</strong> to use the Gravity Forms + Constant Contact plugin.</p>';
+		} else {
+			$message .= '<p>You do not have the Constant Contact API plugin enabled. <a href="'.admin_url('plugin-install.php?tab=plugin-information&plugin=constant-contact-api&from=plugins&TB_iframe=true&width=600&height=550').'" class="thickbox" title="Install Constant Contact API">Add it to your site.</a></p>';
+		}
 	} 
 	if(!class_exists('RGForms')) {
-		$message .= '<p>You do not have the Gravity Forms plugin enabled. <a href="http://www.gravityforms.com">Get Gravity Forms</a>.</p>';
+		if(file_exists(WP_PLUGIN_DIR.'/gravityforms/gravityforms.php')) {
+			$message .= '<p>Gravity Forms is installed. <strong>Activate Gravity Forms</strong> to use the Gravity Forms + Constant Contact plugin.</p>';
+		} else {
+			$message .= '<h2><a href="http://sn.im/gravityforms">Gravity Forms</a> is required.</h2><p>You do not have the Gravity Forms plugin enabled. <a href="http://sn.im/gravityforms">Get Gravity Forms</a>.</p>';
+		}
 	}
-	if($message) {
-		$message .= '</div>';
-		echo $message;
+	if(!empty($message)) {
+		echo '<div id="message" class="error">'.$message.'</div>';
 	}
 }
 
-
 add_action('admin_head-toplevel_page_gf_edit_forms', 'gf_cc_add_help' );
-
-add_action('admin_head-toplevel_page_gf_edit_forms', 'gf_cc_add_help' );
+add_action('admin_head-forms_page_gf_new_form', 'gf_cc_add_help' );
 
 function gf_cc_add_help() {
-	
+	$i = 0;
 	$gf_cc_fields = gf_cc_fields();
-
+	
 	$message = '
 	<div style="float:right; width:40%; ">
 		<h3>Available fields are:</h3>
@@ -72,33 +77,49 @@ function gf_cc_add_help() {
 			}
 		}
 		$message .= '</ul></div>';
-		
-	$message .= '
+	$a = ' style="text-align:left!important;"';	
+	$message .= <<<EOD
+<div class="wrap">
 	<h2>To integrate Constant Contact using Gravity Forms, you must modify your form.</h2>
-	<p>For each field you want to be inserted into the Constant Contact database, you must modify it in the <em>Form Editor</em> below.</p>
+	<p$a>For each field you want to be inserted into the Constant Contact database, you must modify it in the <em>Form Editor</em> below.</p>
 	
-	<h3>To add user-submissions to Constant Contact:</h3>
+	<h3>To show email list choices:</h3>
+	<ol>
+	<li>Add a field for users to choose email lists (Checkboxes, Dropdown, or Multiple Choice fields are good)</li>
+	<li>Click the "Bulk Add / Predefined Choices" button</li>
+	<li>Choose "Constant Contact Lists" from the bottom of the left column</li>
+	<li>Click the "Update Choices" button</li>
+	<li>Check the box to the left of the names of the lists you would like selected by default</li>
+	<li>Click the tab called "Advanced" (to the right of "Properties")</li>
+	<li>Check the checkbox for "Allow field to be populated dynamically"</li>
+	<li>In the "Parameter Name" textbox, enter <code>EmailLists</code></li>
+	<li>Save the form</li>
+	</ol>
+	
+	<h3>To add fields to Constant Contact:</h3>
 	<ol>
 	<li>Click the "Edit" link on the field (for example, "Name")</li>
 	<li>Click the tab called "Advanced" (to the right of "Properties")</li>
 	<li>Check the checkbox for "Allow field to be populated dynamically"</li>
-	<li>In the "Parameter Name" textbox, insert the corresponding field name for each field (For the Name field, you would add "FirstName" and "LastName")</li>
-	</ol>';
+	<li>In the "Parameter Name" textbox, insert the <strong>corresponding field name</strong> for each field (For the Name field, you would add <code>FirstName</code> and <code>LastName</code>)</li>
+	</ol>
 	
-	$message .= '<h3>YOU MUST DO THE FOLLOWING to integrate your form</h3><p>In order to comply with Constant Contact policy, you must add a checkbox field with the "Parameter Name" of <code>AddNewsletter</code>.</p><p>If you don\'t care about their policies, you must at least add a Hidden field with the "Parameter Name" of <code>AddNewsletter</code></p>';
-
-	$message .= '<div class="clear"></div>';
+	<p$a>If you don't give users the choice of which lists to subscribe to, in order to comply with Constant Contact policy, you must add a checkbox field with the "Parameter Name" of <code>AddNewsletter</code>. (see instructions above).</p>
+</div>
+	<div class="clear"></div>
+EOD;
 	
 	add_contextual_help( 'toplevel_page_gf_edit_forms', $message );
+	add_contextual_help( 'forms_page_gf_new_form', $message );
 	
 	// I hate enqueue scripts.
 	echo '<style type="text/css">#wpbody #screen-meta { z-index:999999!important; }</style>';
 }
 
-function gf_cc_style() {  }
 
 function gf_cc_fields() {
 	return array(
+			'EmailLists', // ZK added
 			'AddNewsletter', // ZK added
 			'FirstName', 
 			'MiddleName', 
@@ -192,63 +213,81 @@ function gf_cc_submit($entry, $form) {
 			$i++;
 		}
 	}
-	
 
 	// We format the submission to match up with  Constant Contact's API field names
-	$ccsubmit = array();
+	$ccsubmit = $addedlists = array();
 	$checked = false;
+	$listid = '';
 	foreach($submit as $key => $field) {
 		if(empty($field['name'])) { unset($submit[$key]); }
 		if(in_array($field['name'], $gf_cc_fields)) {
 			if($field['name'] == 'AddNewsletter') { $submit[$key]['value'] = $field['value'] = $checked = 1; }
 			$ccsubmit["{$field['name']}"] = $field['value'];
 		}
+		if($field['name'] == 'Lists' || $field['name'] == 'CCLists' || $field['name'] == 'EmailLists') {
+			$ccsubmit["{$field['name']}"] = $field['value'];
+			$listid = (int)$field['id'];
+		}
+		if(floor($field['id']) == $listid) {
+			if(!empty($field['value']) && is_numeric($field['value']) || $field['value'] === '0') {
+				$addedlists[$field['value']] = $field['label']; 
+			}
+		}
+		
 		if(is_email($field['value'])) { $email = $field['value']; }
 	}
+	
 	
 	###
 	### Add submission to Constant Contact
 	###
 	
-	if(!empty($ccsubmit['AddNewsletter']) && $email) {
+	if((!empty($ccsubmit['AddNewsletter']) || !empty($addedlists)) && $email) {
 		$cc = constant_contact_create_object();
 		if(!is_object($cc)) { return; }
 		
-		// See if the default list is already set
-		$default = get_option('cc_default_list');
-		
-		// If not, then let's do this.
-		if(!$default || !is_array($default)) {
+		if(empty($addedlists)) {
+			// See if the default list is already set
+			$default = get_option('cc_default_list');
 			
-			$lists = array();
-			$_lists = $cc->get_all_lists();
-	
-			if($_lists) {
-				foreach($_lists as $k => $v) {
-					if(!empty($v['OptInDefault']) && $v['OptInDefault'] != 'false') {
-						$_lists[$k] = $v['id'];
-					} else {
-						unset($_lists[$k]);
-					}
+			// If not, then let's do this.
+			if((empty($default) && $default !== 0) || !is_array($default)) {
+				
+				$lists = array();
+				if(function_exists('constant_contact_get_lists')) {
+					$_lists = constant_contact_get_lists();
+				} else {
+					$_lists = $cc->get_all_lists();
 				}
 				
-				$newlists = array();
-				foreach($_lists as $list_id):
-						$list = $cc->get_list($list_id);
-						$newlists[$list['id']] = $list['Name'];
-				endforeach;
-				$lists = $newlists;
+				if($_lists) {
+					foreach($_lists as $k => $v) {
+						if(!empty($v['OptInDefault']) && $v['OptInDefault'] != 'false') {
+							$_lists[$k] = $v['id'];
+						} else {
+							unset($_lists[$k]);
+						}
+					}
+					
+					$newlists = array();
+					foreach($_lists as $list_id):
+							$list = $cc->get_list($list_id);
+							$newlists[$list['id']] = $list['Name'];
+					endforeach;
+					$lists = $newlists;
+				}
+				
+				update_option('cc_default_list', $lists);
+			} else {
+				$lists = $default;
 			}
-			
-			update_option('cc_default_list', $lists);
 		} else {
-			$lists = $default;
+			$lists = $addedlists;
 		}
-		
+
 		$lists = array_keys($lists);
 		
 		$cc->set_action_type('contact'); // important, tell CC that the contact made this action
-		
 		
 		// Find out whether the user has already registered. If so, update don't create
 		$contact = $cc->query_contacts($email);
@@ -261,13 +300,52 @@ function gf_cc_submit($entry, $form) {
 		}
 		if(empty($status)) {
 			echo '<!-- Gravity Forms + Constant Contact: There was an error. Please report to info@katzwebservices.com -->';
+		} else {
+			echo '<!-- Gravity Forms + Constant Contact: Successfully added to lists '.implode(', ', $lists).' -->';
 		}
 	} else {
 		if($email) {
-			echo '<!-- Gravity Forms + Constant Contact: The user did not check the AddNewsletter checkbox, or it may not exist. It is required for the plugin to work. -->';
+			echo '<!-- Gravity Forms + Constant Contact: The user was not added: the user did not check the AddNewsletter checkbox or it may not exist...and/or the user did not select any email lists shown.  -->';
 		} else {
 			echo '<!-- Gravity Forms + Constant Contact: The user did not provide an email address. -->';
 		}
 	}
 }
+
+add_filter("gform_predefined_choices", "gf_cc_add_predefined_choice");
+function gf_cc_add_predefined_choice($choices){
+	
+	$lists = get_transient('gfcc_lists');
+		
+	if(!$lists) {
+		$cc = constant_contact_create_object();
+		if(!is_object($cc)) { return; }
+			
+		$_lists = array();
+		if(function_exists('constant_contact_get_lists')) {
+			$_lists = constant_contact_get_lists();
+		} else {
+			$_lists = $cc->get_all_lists();
+		}
+		if($_lists) {
+			foreach($_lists as $k => $v) {
+				$_lists[$k] = $v['id'];
+			}
+			
+			$newlists = array();
+			foreach($_lists as $list_id):
+				$list = $cc->get_list($list_id);
+				$newlists[] = $list['Name']. '|'.$list['id'];
+			endforeach;
+			$lists = $newlists;
+		}
+		set_transient('gfcc_lists', $lists, 60*60*24*7);
+	}
+	if(is_array($lists)) {
+		$choices["Constant Contact Lists"] = $lists;
+		return $choices;
+	}
+    return;
+}
+
 ?>
