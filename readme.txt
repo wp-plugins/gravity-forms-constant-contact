@@ -1,7 +1,7 @@
 === Gravity Forms + Constant Contact ===
 Tags: gravity forms, forms, gravity, form, crm, gravity form, mail, email, newsletter, Constant Contact, plugin, sidebar, widget, mailing list, API, email marketing, newsletters
 Requires at least: 2.8
-Tested up to: 3.0.1
+Tested up to: 3.0.2
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms+Constant%20Contact&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -18,8 +18,8 @@ If you use Constant Contact email service and the Gravity Forms plugin, you're g
 Activate this plugin and slightly modify your forms, and you'll be able to add users to your Constant Contact lists.  Users can choose which email lists they are subscribed to.
 
 ####Gravity Forms + Constant Contact Requirements
-* [Constant Contact API plugin](http://wordpress.org/extend/plugins/constant-contact-api/)
-* [Gravity Forms plugin](http://sn.im/gravityforms)
+* <a href="http://wordpress.org/extend/plugins/constant-contact-api/">Constant Contact API plugin</a>
+* <a href="http://sn.im/gravityforms" rel="nofollow">Gravity Forms plugin</a>
 * PHP 5
 
 ### You may also be interested in:
