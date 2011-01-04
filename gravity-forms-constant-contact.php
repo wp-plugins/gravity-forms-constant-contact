@@ -4,7 +4,7 @@ Plugin Name: Gravity Forms + Constant Contact
 Plugin URI: http://www.seodenver.com/gravity-forms-constant-contact/
 Description: Add contacts to your Constant Contact mailing list when they fill out a Gravity Forms form.
 Author: Katz Web Services, Inc.
-Version: 1.1
+Version: 1.1.1
 Author URI: http://www.seodenver.com
 
 --------------------------------------------------
@@ -116,45 +116,46 @@ EOD;
 	echo '<style type="text/css">#wpbody #screen-meta { z-index:999999!important; }</style>';
 }
 
-
-function gf_cc_fields() {
-	return array(
-			'EmailLists', // ZK added
-			'AddNewsletter', // ZK added
-			'FirstName', 
-			'MiddleName', 
-			'LastName',
-			'JobTitle', 
-			'CompanyName',
-			'HomePhone', 
-			'WorkPhone',
-			'Addr1',
-			'Addr2',
-			'Addr3',
-			'City',
-			'StateCode',
-			'StateName',
-			'CountryCode',
-			'CountryName',
-			'PostalCode',
-			'SubPostalCode',
-			'Note',
-			'CustomField1',
-			'CustomField2',
-			'CustomField3',
-			'CustomField4',
-			'CustomField5',
-			'CustomField6',
-			'CustomField7',
-			'CustomField8',
-			'CustomField9',
-			'CustomField10',
-			'CustomField11',
-			'CustomField12',
-			'CustomField13',
-			'CustomField14',
-			'CustomField15',
-		);
+if(!function_exists('gf_cc_fields')) {
+	function gf_cc_fields() {
+		return array(
+				'EmailLists', // ZK added
+				'AddNewsletter', // ZK added
+				'FirstName', 
+				'MiddleName', 
+				'LastName',
+				'JobTitle', 
+				'CompanyName',
+				'HomePhone', 
+				'WorkPhone',
+				'Addr1',
+				'Addr2',
+				'Addr3',
+				'City',
+				'StateCode',
+				'StateName',
+				'CountryCode',
+				'CountryName',
+				'PostalCode',
+				'SubPostalCode',
+				'Note',
+				'CustomField1',
+				'CustomField2',
+				'CustomField3',
+				'CustomField4',
+				'CustomField5',
+				'CustomField6',
+				'CustomField7',
+				'CustomField8',
+				'CustomField9',
+				'CustomField10',
+				'CustomField11',
+				'CustomField12',
+				'CustomField13',
+				'CustomField14',
+				'CustomField15',
+			);
+	}
 }
 
 ###
@@ -169,25 +170,27 @@ function gf_cc_submit($entry, $form) {
 	
 	$gf_cc_fields = gf_cc_fields();
 	
-	function gf_cc_process_field($field, $entry) {
-		$result = array();
-		$entries = false;
-		
-		if(is_array($field['inputs'])) {
-			foreach($field['inputs'] as $input) { if(isset($entry["{$input['id']}"])) { $entries = true; }}
-			if(!$entries) { return false; }
+	if(!function_exists('gf_cc_process_field')) {
+		function gf_cc_process_field($field, $entry) {
+			$result = array();
+			$entries = false;
+			
+			if(is_array($field['inputs'])) {
+				foreach($field['inputs'] as $input) { if(isset($entry["{$input['id']}"])) { $entries = true; }}
+				if(!$entries) { return false; }
+			}
+			
+			if(((isset($entry["{$field['id']}"]) || $entries) || $field['type'] == 'hidden') && is_numeric($field['id'])) { 
+				$result['value'] = $entry["{$field['id']}"];
+				$result['name'] = isset($field['inputName']) ? $field['inputName'] : $field['name'];
+				if(empty($result['name']) && !empty($field['parentName'])) { $result['name'] = $field['parentName']; }
+				$result['id'] = $field['id'];
+				$result['label'] = $field['label'];
+				return array($result, $form);
+			} 
+			
+			return false;
 		}
-		
-		if(((isset($entry["{$field['id']}"]) || $entries) || $field['type'] == 'hidden') && is_numeric($field['id'])) { 
-			$result['value'] = $entry["{$field['id']}"];
-			$result['name'] = isset($field['inputName']) ? $field['inputName'] : $field['name'];
-			if(empty($result['name']) && !empty($field['parentName'])) { $result['name'] = $field['parentName']; }
-			$result['id'] = $field['id'];
-			$result['label'] = $field['label'];
-			return array($result, $form);
-		} 
-		
-		return false;
 	}
 
 	$i = 0;
@@ -313,39 +316,41 @@ function gf_cc_submit($entry, $form) {
 }
 
 add_filter("gform_predefined_choices", "gf_cc_add_predefined_choice");
-function gf_cc_add_predefined_choice($choices){
-	
-	$lists = get_transient('gfcc_lists');
+if(!function_exists('gf_cc_add_predefined_choice')) {
+	function gf_cc_add_predefined_choice($choices){
 		
-	if(!$lists) {
-		$cc = constant_contact_create_object();
-		if(!is_object($cc)) { return; }
+		$lists = get_transient('gfcc_lists');
 			
-		$_lists = array();
-		if(function_exists('constant_contact_get_lists')) {
-			$_lists = constant_contact_get_lists();
-		} else {
-			$_lists = $cc->get_all_lists();
-		}
-		if($_lists) {
-			foreach($_lists as $k => $v) {
-				$_lists[$k] = $v['id'];
+		if(!$lists) {
+			$cc = constant_contact_create_object();
+			if(!is_object($cc)) { return; }
+				
+			$_lists = array();
+			if(function_exists('constant_contact_get_lists')) {
+				$_lists = constant_contact_get_lists();
+			} else {
+				$_lists = $cc->get_all_lists();
 			}
-			
-			$newlists = array();
-			foreach($_lists as $list_id):
-				$list = $cc->get_list($list_id);
-				$newlists[] = $list['Name']. '|'.$list['id'];
-			endforeach;
-			$lists = $newlists;
+			if($_lists) {
+				foreach($_lists as $k => $v) {
+					$_lists[$k] = $v['id'];
+				}
+				
+				$newlists = array();
+				foreach($_lists as $list_id):
+					$list = $cc->get_list($list_id);
+					$newlists[] = $list['Name']. '|'.$list['id'];
+				endforeach;
+				$lists = $newlists;
+			}
+			set_transient('gfcc_lists', $lists, 60*60*24*7);
 		}
-		set_transient('gfcc_lists', $lists, 60*60*24*7);
+		if(is_array($lists)) {
+			$choices["Constant Contact Lists"] = $lists;
+			return $choices;
+		}
+	    return;
 	}
-	if(is_array($lists)) {
-		$choices["Constant Contact Lists"] = $lists;
-		return $choices;
-	}
-    return;
 }
 
 ?>

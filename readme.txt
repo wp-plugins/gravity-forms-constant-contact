@@ -1,7 +1,7 @@
 === Gravity Forms + Constant Contact ===
 Tags: gravity forms, forms, gravity, form, crm, gravity form, mail, email, newsletter, Constant Contact, plugin, sidebar, widget, mailing list, API, email marketing, newsletters
 Requires at least: 2.8
-Tested up to: 3.0.2
+Tested up to: 3.0.4
 Stable tag: trunk
 Contributors: katzwebdesign
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms+Constant%20Contact&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
@@ -114,6 +114,9 @@ This plugin is released under a GPL license.
 
 == Upgrade Notice ==
 
+= 1.1.1 =
+* Fixed `Fatal error: Cannot redeclare gf_cc_process_field()` error
+
 = 1.1 = 
 * Added list selection capability - allow users to choose which lists they are subscribed to (view the plugin's Installation tab or the Help tab on the Edit Form page to learn more)
 * Improved notices if Gravity Forms or Constant Contact API is not installed or activated
@@ -122,6 +125,9 @@ This plugin is released under a GPL license.
 * No upgrade notice, since this is the first version!
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed `Fatal error: Cannot redeclare gf_cc_process_field()` error
 
 = 1.1 = 
 * Added list selection capability - allow users to choose which lists they are subscribed to (view the plugin's Installation tab or the Help tab on the Edit Form page to learn more)
