@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Constant Contact Add-On
 Plugin URI: http://www.katzwebservices.com
 Description: Integrates Gravity Forms with Constant Contact allowing form submissions to be automatically sent to your Constant Contact account.
-Version: 2.0
+Version: 2.0.1
 Author: katzwebdesign
 Author URI: http://www.katzwebservices.com
 
@@ -33,7 +33,7 @@ class GFConstantContact {
     private static $path = "gravity-forms-constant-contact/constantcontact.php";
     private static $url = "http://www.gravityforms.com";
     private static $slug = "gravity-forms-constant-contact";
-    private static $version = "2.0.0";
+    private static $version = "2.0.1";
     private static $min_gravityforms_version = "1.3.9";
 
     //Plugin starting point. Will load appropriate files
@@ -132,13 +132,14 @@ class GFConstantContact {
 
     public static function plugin_row(){
         if(!self::is_gravityforms_supported()){
-            $message = sprintf(__("Gravity Forms " . self::$min_gravityforms_version . " is required. Activate it now or %spurchase it today!%s"), "<a href='http://www.gravityforms.com'>", "</a>");
+            $message = sprintf(__("Gravity Forms " . self::$min_gravityforms_version . " is required. Activate it now or %spurchase it today!%s"), "<a href='http://wordpressformplugin.com/?r=gfcc'>", "</a>");
             RGConstantContactUpgrade::display_plugin_message($message, true);
         }
         else{
-            $version_info = RGConstantContactUpgrade::get_version_info(self::$slug, self::get_key(), self::$version);
-
-            if(!$version_info["is_valid_key"]){
+        	
+        	$version_info = GFCommon::get_version_info();
+        	
+        	if(!$version_info["is_valid_key"]){
                 $new_version = version_compare(self::$version, $version_info["version"], '<') ? __('There is a new version of Gravity Forms Constant Contact Add-On available.', 'gravity-forms-constant-contact') .' <a class="thickbox" title="Gravity Forms Constant Contact Add-On" href="plugin-install.php?tab=plugin-information&plugin=' . self::$slug . '&TB_iframe=true&width=640&height=808">'. sprintf(__('View version %s Details', 'gravity-forms-constant-contact'), $version_info["version"]) . '</a>. ' : '';
                 $message = $new_version . sprintf(__('%sRegister%s your copy of Gravity Forms to receive access to automatic upgrades and support. Need a license key? %sPurchase one now%s.', 'gravity-forms-constant-contact'), '<a href="admin.php?page=gf_settings">', '</a>', '<a href="http://wordpressformplugin.com/?r=gfcc">', '</a>') . '</div></td>';
                 RGConstantContactUpgrade::display_plugin_message($message);

@@ -43,11 +43,12 @@ This plugin is released under a GPL license.
 
 == Screenshots ==
 
-1. Set up your login credentials
-1. Configure a Feed
-1. See a list of all Constant Contact form feeds
+1. Users can choose which Constant Contact lists they are added to.
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+* Fixed issue where registration notice shows up on Plugins page, even when Gravity Forms is registered.
 
 = 2.0 =
 * Converted to Gravity Forms Add-On Feeds system. If upgrading, <strong>you will need to re-configure your connected forms!</strong>
@@ -61,6 +62,9 @@ This plugin is released under a GPL license.
 * No upgrade notice, since this is the first version!
 
 == Changelog ==
+
+= 2.0.1 =
+* Fixed issue where registration notice shows up on Plugins page, even when Gravity Forms is registered.
 
 = 2.0 =
 * Converted to Gravity Forms Add-On Feeds system. If upgrading, <strong>you will need to re-configure your connected forms!</strong>
