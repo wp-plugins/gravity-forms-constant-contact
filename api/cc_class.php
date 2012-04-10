@@ -478,11 +478,17 @@
 			$note_node = $contact_node->addChild("Note", htmlspecialchars($params['notes'], ENT_QUOTES, 'UTF-8'));
 			$emailtype_node = $contact_node->addChild("EmailType", htmlspecialchars($params['mail_type'], ENT_QUOTES, 'UTF-8'));
 			
-			if (! empty($params['custom_fields'])) {
-				foreach ($params['custom_fields'] as $k=>$v) {
-					$contact_node->addChild("CustomField".$k, htmlspecialchars(($v), ENT_QUOTES, 'UTF-8'));
+			
+			// Modified by ZK for Version 2.0.2
+			for ($i = 1; $i < 16; $i++) {
+				if (!empty($params['custom_field_'.$i]) && $params['custom_field_'.$i] !== 0) {
+					$content = htmlspecialchars((string)$params['custom_field_'.$i], ENT_QUOTES, 'UTF-8');
+					$content = substr($content, 0, 50);
+					$content = preg_replace('/(.*)&([^;]+)?$/ism', '$1', $content); // This prevents unencoded endings
+					$contact_node->addChild("CustomField".$i, $content);
 				}
 			}
+			// End modification
 
 			$contactlists_node = $contact_node->addChild("ContactLists");			
 			if ($params['lists']) {

@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Constant Contact Add-On
 Plugin URI: http://www.katzwebservices.com
 Description: Integrates Gravity Forms with Constant Contact allowing form submissions to be automatically sent to your Constant Contact account.
-Version: 2.0.1
+Version: 2.0.2
 Author: katzwebdesign
 Author URI: http://www.katzwebservices.com
 
@@ -33,7 +33,7 @@ class GFConstantContact {
     private static $path = "gravity-forms-constant-contact/constantcontact.php";
     private static $url = "http://www.gravityforms.com";
     private static $slug = "gravity-forms-constant-contact";
-    private static $version = "2.0.1";
+    private static $version = "2.0.2";
     private static $min_gravityforms_version = "1.3.9";
 
     //Plugin starting point. Will load appropriate files
@@ -1177,21 +1177,21 @@ class CC_SuperClass extends CC_Utility {
 			array('tag'=>'sub_zip_code',  'req' => false, 'name' => "Sub Postal Code"),
 			array('tag'=>'notes',		  'req' => false, 'name' => "Note"),
 			array('tag'=>'mail_type', 	  'req' => false, 'name' => "Email Type (Text or HTML)"),
-			array('tag'=>'custom_field_1','req' => false, 'name' => "Custom Field 1"),
-			array('tag'=>'custom_field_2', 'req' => false, 'name' => "Custom Field 2"),
-			array('tag'=>'custom_field_3', 'req' => false, 'name' => "Custom Field 3"),
-			array('tag'=>'custom_field_4', 'req' => false, 'name' => "Custom Field 4"),
-			array('tag'=>'custom_field_5', 'req' => false, 'name' => "Custom Field 5"),
-			array('tag'=>'custom_field_6', 'req' => false, 'name' => "Custom Field 6"),
-			array('tag'=>'custom_field_7', 'req' => false, 'name' => "Custom Field 7"),
-			array('tag'=>'custom_field_8', 'req' => false, 'name' => "Custom Field 8"),
-			array('tag'=>'custom_field_9', 'req' => false, 'name' => "Custom Field 9"),
-			array('tag'=>'custom_field_10','req' => false, 'name' => "Custom Field 10"),
-			array('tag'=>'custom_field_11','req' => false, 'name' => "Custom Field 11"),
-			array('tag'=>'custom_field_12','req' => false, 'name' => "Custom Field 12"),
-			array('tag'=>'custom_field_13','req' => false, 'name' => "Custom Field 13"),
-			array('tag'=>'custom_field_14','req' => false, 'name' => "Custom Field 14"),
-			array('tag'=>'custom_field_15','req' => false, 'name' => "Custom Field 15"),
+			array('tag'=>'custom_field_1','req' => false, 'name' => "Custom Field 1 (Up to 50 characters)"),
+			array('tag'=>'custom_field_2', 'req' => false, 'name' => "Custom Field 2 (Up to 50 characters)"),
+			array('tag'=>'custom_field_3', 'req' => false, 'name' => "Custom Field 3 (Up to 50 characters)"),
+			array('tag'=>'custom_field_4', 'req' => false, 'name' => "Custom Field 4 (Up to 50 characters)"),
+			array('tag'=>'custom_field_5', 'req' => false, 'name' => "Custom Field 5 (Up to 50 characters)"),
+			array('tag'=>'custom_field_6', 'req' => false, 'name' => "Custom Field 6 (Up to 50 characters)"),
+			array('tag'=>'custom_field_7', 'req' => false, 'name' => "Custom Field 7 (Up to 50 characters)"),
+			array('tag'=>'custom_field_8', 'req' => false, 'name' => "Custom Field 8 (Up to 50 characters)"),
+			array('tag'=>'custom_field_9', 'req' => false, 'name' => "Custom Field 9 (Up to 50 characters)"),
+			array('tag'=>'custom_field_10','req' => false, 'name' => "Custom Field 10 (Up to 50 characters)"),
+			array('tag'=>'custom_field_11','req' => false, 'name' => "Custom Field 11 (Up to 50 characters)"),
+			array('tag'=>'custom_field_12','req' => false, 'name' => "Custom Field 12 (Up to 50 characters)"),
+			array('tag'=>'custom_field_13','req' => false, 'name' => "Custom Field 13 (Up to 50 characters)"),
+			array('tag'=>'custom_field_14','req' => false, 'name' => "Custom Field 14 (Up to 50 characters)"),
+			array('tag'=>'custom_field_15','req' => false, 'name' => "Custom Field 15 (Up to 50 characters)"),
 		);
 	}
 	

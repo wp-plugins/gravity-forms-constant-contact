@@ -47,6 +47,10 @@ This plugin is released under a GPL license.
 
 == Upgrade Notice ==
 
+= 2.0.2 =
+* Fixed bug where Custom Fields don't get sent to Constant Contact.
+* Added notice on Custom Fields feed setup to let user know that custom fields are limited to 50 characters.
+
 = 2.0.1 =
 * Fixed issue where registration notice shows up on Plugins page, even when Gravity Forms is registered.
 
@@ -62,6 +66,10 @@ This plugin is released under a GPL license.
 * No upgrade notice, since this is the first version!
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed bug where Custom Fields don't get sent to Constant Contact.
+* Added notice on Custom Fields feed setup to let user know that custom fields are limited to 50 characters.
 
 = 2.0.1 =
 * Fixed issue where registration notice shows up on Plugins page, even when Gravity Forms is registered.
