@@ -10,7 +10,7 @@ Add contacts to your Constant Contact mailing list when they submit a <a href="h
 
 == Description ==
 
-> This plugin requires the magnificent <a href="http://wordpressformplugin.com?r=gfccreadme" rel="nofollow">Gravity Forms</a> plugin and a <a href="http://www.constantcontact.com/index.jsp?pn=katzwebdesign&cc=GF_CC" rel="nofollow">Constant Contact</a> account.
+> This plugin requires the magnificent <a href="http://wordpressformplugin.com?r=gfccreadme" rel="nofollow">Gravity Forms</a> plugin and a <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">Constant Contact</a> account.
 
 ###Integrate Constant Contact with Gravity Forms
 If you use <strong>Constant Contact</strong> email service and the Gravity Forms plugin, you're going to want this plugin!
@@ -36,7 +36,7 @@ Integrate your Gravity Forms forms so that when users submit a form entry, the e
 This plugin requires the [Gravity Forms plugin](http://wordpressformplugin.com/?r=gfccreadme), which is the simply best WordPress contact form plugin. __Don't use Gravity Forms? [Buy the plugin](http://wordpressformplugin.com/?r=gfccreadme)__ and start using this add-on plugin!
 
 = Does this plugin require Constant Contact? =
-Yes, it does. If you don't have an Constant Contact account, <a href="http://www.constantcontact.com/index.jsp?pn=katzwebdesign&cc=GF_CC" rel="nofollow">sign up for an account here</a>.
+Yes, it does. If you don't have an Constant Contact account, <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">sign up for an account here</a>.
 
 = What's the license for this plugin? =
 This plugin is released under a GPL license.
