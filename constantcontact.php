@@ -132,7 +132,7 @@ class GFConstantContact {
 
     public static function plugin_row(){
         if(!self::is_gravityforms_supported()){
-            $message = sprintf(__("Gravity Forms " . self::$min_gravityforms_version . " is required. Activate it now or %spurchase it today!%s"), "<a href='http://wordpressformplugin.com/?r=gfcc'>", "</a>");
+            $message = sprintf(__("Gravity Forms " . self::$min_gravityforms_version . " is required. Activate it now or %spurchase it today!%s"), "<a href='http://formplugin.com/?r=gfcc'>", "</a>");
             RGConstantContactUpgrade::display_plugin_message($message, true);
         }
         else{
@@ -141,7 +141,7 @@ class GFConstantContact {
         	
         	if(!$version_info["is_valid_key"]){
                 $new_version = version_compare(self::$version, $version_info["version"], '<') ? __('There is a new version of Gravity Forms Constant Contact Add-On available.', 'gravity-forms-constant-contact') .' <a class="thickbox" title="Gravity Forms Constant Contact Add-On" href="plugin-install.php?tab=plugin-information&plugin=' . self::$slug . '&TB_iframe=true&width=640&height=808">'. sprintf(__('View version %s Details', 'gravity-forms-constant-contact'), $version_info["version"]) . '</a>. ' : '';
-                $message = $new_version . sprintf(__('%sRegister%s your copy of Gravity Forms to receive access to automatic upgrades and support. Need a license key? %sPurchase one now%s.', 'gravity-forms-constant-contact'), '<a href="admin.php?page=gf_settings">', '</a>', '<a href="http://wordpressformplugin.com/?r=gfcc">', '</a>') . '</div></td>';
+                $message = $new_version . sprintf(__('%sRegister%s your copy of Gravity Forms to receive access to automatic upgrades and support. Need a license key? %sPurchase one now%s.', 'gravity-forms-constant-contact'), '<a href="admin.php?page=gf_settings">', '</a>', '<a href="http://formplugin.com/?r=gfcc">', '</a>') . '</div></td>';
                 RGConstantContactUpgrade::display_plugin_message($message);
             }
         }

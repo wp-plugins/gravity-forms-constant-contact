@@ -70,7 +70,7 @@ class RGConstantContactUpgrade{
         $raw_response = wp_remote_request(GRAVITY_MANAGER_URL . "/changelog.php?" . self::get_remote_request_params($offering, $key, $version), $options);
 
         if ( is_wp_error( $raw_response ) || 200 != $raw_response['response']['code']){
-            $page_text = sprintf(__("Oops!! Something went wrong.%sPlease try again or %scontact us%s.", 'gravityformsconstantcontact'), "<br/>", "<a href='http://www.gravityforms.com'>", "</a>");
+            $page_text = sprintf(__("Oops!! Something went wrong.%sPlease try again or %scontact us%s.", 'gravityformsconstantcontact'), "<br/>", "<a href='http://formplugin.com'>", "</a>");
         }
         else{
             $page_text = $raw_response['body'];
