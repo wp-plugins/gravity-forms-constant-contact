@@ -33,7 +33,7 @@ Integrate your Gravity Forms forms so that when users submit a form entry, the e
 == Frequently Asked Questions == 
 
 = Does this plugin require Gravity Forms? =
-This plugin requires the [Gravity Forms plugin](http://wordpressformplugin.com/?r=gfccreadme), which is the simply best WordPress contact form plugin. __Don't use Gravity Forms? [Buy the plugin](http://wordpressformplugin.com/?r=gfccreadme)__ and start using this add-on plugin!
+This plugin requires the [Gravity Forms plugin](http://www.gravityforms.com/?r=gfccreadme), which is the simply best WordPress contact form plugin. __Don't use Gravity Forms? [Buy the plugin](http://www.gravityforms.com/?r=gfccreadme)__ and start using this add-on plugin!
 
 = Does this plugin require Constant Contact? =
 Yes, it does. If you don't have an Constant Contact account, <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">sign up for an account here</a>.
