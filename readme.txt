@@ -10,7 +10,7 @@ Add contacts to your Constant Contact mailing list when they submit a <a href="h
 
 == Description ==
 
-> This plugin requires the magnificent <a href="http://www.gravityforms.com?r=gfccreadme" rel="nofollow">Gravity Forms</a> plugin and a <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">Constant Contact</a> account.
+> This plugin requires a <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">Constant Contact</a> account.
 
 ###Integrate Constant Contact with Gravity Forms
 If you use <strong>Constant Contact</strong> email service and the Gravity Forms plugin, you're going to want this plugin!
