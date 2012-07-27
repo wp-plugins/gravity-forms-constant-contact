@@ -3,26 +3,26 @@
 Plugin Name: Gravity Forms Constant Contact Add-On
 Plugin URI: http://www.katzwebservices.com
 Description: Integrates Gravity Forms with Constant Contact allowing form submissions to be automatically sent to your Constant Contact account.
-Version: 2.0.2
-Author: katzwebdesign
+Version: 2.0.3
+Author: Katz Web Services, Inc.
 Author URI: http://www.katzwebservices.com
 
 ------------------------------------------------------------------------
-Copyright 2011 Katz Web Services, Inc.  (email: info@katzwebservices.com)
+Copyright 2012 Katz Web Services, Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
+the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 
 add_action('init',  array('GFConstantContact', 'init'));
@@ -30,20 +30,29 @@ register_activation_hook( __FILE__, array("GFConstantContact", "add_permissions"
 
 class GFConstantContact {
 
+	private static $name = "Gravity Forms Constant Contact Add-On";
     private static $path = "gravity-forms-constant-contact/constantcontact.php";
     private static $url = "http://www.gravityforms.com";
     private static $slug = "gravity-forms-constant-contact";
-    private static $version = "2.0.2";
+    private static $version = "2.0.3";
     private static $min_gravityforms_version = "1.3.9";
 
     //Plugin starting point. Will load appropriate files
     public static function init(){
-
-        if(RG_CURRENT_PAGE == "plugins.php"){
+	    global $pagenow;
+		
+		if($pagenow === 'plugins.php') {
+			add_action("admin_notices", array('GFConstantContact', 'is_gravity_forms_installed'), 10);
+		}
+		
+		if(self::is_gravity_forms_installed(false, false) === 0){
+			add_action('after_plugin_row_' . self::$path, array('GFConstantContact', 'plugin_row') );
+           return;
+        }
+        
+        if(defined('RG_CURRENT_PAGE') && RG_CURRENT_PAGE == "plugins.php"){
             //loading translations
             load_plugin_textdomain('gravity-forms-constant-contact', FALSE, '/gravity-forms-constant-contact/languages' );
-
-            add_action('after_plugin_row_' . self::$path, array('GFConstantContact', 'plugin_row') );
 
            //force new remote request for version info on the plugin page
             self::flush_version_info();
@@ -113,6 +122,47 @@ class GFConstantContact {
             add_action("gform_post_submission", array('GFConstantContact', 'export'), 10, 2);
         }
     }
+    
+    public static function is_gravity_forms_installed($asd = '', $echo = true) {
+		global $pagenow, $page; $message = '';
+		
+		$installed = 0;
+		$name = self::$name;
+		if(!class_exists('RGForms')) {
+			if(file_exists(WP_PLUGIN_DIR.'/gravityforms/gravityforms.php')) {
+				$installed = 1;
+				$message .= __(sprintf('%sGravity Forms is installed but not active. %sActivate Gravity Forms%s to use the %s plugin.%s', '<p>', '<strong><a href="'.wp_nonce_url(admin_url('plugins.php?action=activate&plugin=gravityforms/gravityforms.php'), 'activate-plugin_gravityforms/gravityforms.php').'">', '</a></strong>', $name,'</p>'), 'gravity-forms-salesforce');
+			} else {
+				$message .= <<<EOD
+<p><a href="http://katz.si/gravityforms?con=banner" title="Gravity Forms Contact Form Plugin for WordPress"><img src="http://gravityforms.s3.amazonaws.com/banners/728x90.gif" alt="Gravity Forms Plugin for WordPress" width="728" height="90" style="border:none;" /></a></p>
+		<h3><a href="http://katz.si/gravityforms" target="_blank">Gravity Forms</a> is required for the $name</h3>
+		<p>You do not have the Gravity Forms plugin installed. <a href="http://katz.si/gravityforms">Get Gravity Forms</a> today.</p>
+EOD;
+			}
+			
+			if(!empty($message) && $echo) {
+				echo '<div id="message" class="updated">'.$message.'</div>';
+			}
+		} else {
+			return true;
+		}
+		return $installed;
+	}
+	
+	public static function plugin_row(){
+        if(!self::is_gravityforms_supported()){
+            $message = sprintf(__("%sGravity Forms%s is required. %sPurchase it today!%s"), "<a href='http://katz.si/gravityforms'>", "</a>", "<a href='http://katz.si/gravityforms'>", "</a>");
+            self::display_plugin_message($message, true);
+        }
+    }
+    
+    public static function display_plugin_message($message, $is_error = false){
+    	$style = '';
+        if($is_error)
+            $style = 'style="background-color: #ffebe8;"';
+
+        echo '</tr><tr class="plugin-update-tr"><td colspan="5" class="plugin-update"><div class="update-message" ' . $style . '>' . $message . '</div></td>';
+    }
 
     public static function update_feed_active(){
         check_ajax_referer('rg_update_feed_active','rg_update_feed_active');
@@ -128,23 +178,6 @@ class GFConstantContact {
             require_once("plugin-upgrade.php");
 
         RGConstantContactUpgrade::set_version_info(false);
-    }
-
-    public static function plugin_row(){
-        if(!self::is_gravityforms_supported()){
-            $message = sprintf(__("Gravity Forms " . self::$min_gravityforms_version . " is required. Activate it now or %spurchase it today!%s"), "<a href='http://formplugin.com/?r=gfcc'>", "</a>");
-            RGConstantContactUpgrade::display_plugin_message($message, true);
-        }
-        else{
-        	
-        	$version_info = GFCommon::get_version_info();
-        	
-        	if(!$version_info["is_valid_key"]){
-                $new_version = version_compare(self::$version, $version_info["version"], '<') ? __('There is a new version of Gravity Forms Constant Contact Add-On available.', 'gravity-forms-constant-contact') .' <a class="thickbox" title="Gravity Forms Constant Contact Add-On" href="plugin-install.php?tab=plugin-information&plugin=' . self::$slug . '&TB_iframe=true&width=640&height=808">'. sprintf(__('View version %s Details', 'gravity-forms-constant-contact'), $version_info["version"]) . '</a>. ' : '';
-                $message = $new_version . sprintf(__('%sRegister%s your copy of Gravity Forms to receive access to automatic upgrades and support. Need a license key? %sPurchase one now%s.', 'gravity-forms-constant-contact'), '<a href="admin.php?page=gf_settings">', '</a>', '<a href="http://formplugin.com/?r=gfcc">', '</a>') . '</div></td>';
-                RGConstantContactUpgrade::display_plugin_message($message);
-            }
-        }
     }
 
     //Displays current version details on Plugin's page
@@ -239,14 +272,20 @@ class GFConstantContact {
 		$feedback_image = "";
         //feedback for username/password
         if(!empty($settings["username"]) || !empty($settings["password"])){
-            $is_valid = self::is_valid_login($settings["username"], $settings["password"]);
+        	
+        	if(isset($_POST["gf_constantcontact_submit"])) {
+	            $is_valid = self::is_valid_login($settings["username"], $settings["password"]);
+	        } else {
+		        $is_valid = get_option('gravity_forms_cc_valid_api');
+	        }
+	        
             if($is_valid){
                 $message = sprintf(__("Valid username and password. Now go %sconfigure form integration with Constant Contact%s!", "gravity-forms-constant-contact"), '<a href="'.admin_url('admin.php?page=gf_constantcontact').'">', '</a>');
                 $class = 'updated notice';
                 $icon = self::get_base_url() . "/images/tick.png";
             }
             else{
-                $message = __("Invalid API Key, username, and/or password. Please try another combination.", "gravity-forms-constant-contact");
+                $message = __("Invalid username / password combo. Please try another combination. Please note: spaces in your username are not allowed. You can change your username in the My Account link when you are logged into your account, and this may remedy the problem.", "gravity-forms-constant-contact");
                 $class = 'error notice';
                 $icon =  self::get_base_url() . "/images/stop.png";
             }
@@ -345,7 +384,7 @@ class GFConstantContact {
             <div class="updated fade" style="padding:6px"><?php _e("Feeds deleted.", "gravity-forms-constant-contact") ?></div>
             <?php
         }
-
+        
         ?>
         <div class="wrap">
             <h2 style="line-height:71px;"><img alt="<?php _e("Constant Contact", "gravity-forms-constant-contact") ?>" style="float:left; margin-right:10px;" src="<?php echo self::get_base_url() ?>/images/Constant-Contact-Logo-150x71.gif" width="150" height="71" /><?php _e("Constant Contact Feeds", "gravity-forms-constant-contact") ?>
@@ -353,9 +392,17 @@ class GFConstantContact {
             </h2>
 			
 			<ul class="subsubsub">
-	            <li><a href="<?php echo admin_url('admin.php?page=gf_settings&addon=Constant+Contact'); ?>"><?php _e('Add-on Settings', 'gravity-forms-constant-contact'); ?></a> |</li>
+	            <li><a href="<?php echo admin_url('admin.php?page=gf_settings&addon=Constant+Contact'); ?>"><?php _e('Constant Contact Settings', 'gravity-forms-constant-contact'); ?></a> |</li>
 	            <li><a href="<?php echo admin_url('admin.php?page=gf_constantcontact'); ?>" class="current"><?php _e('Constant Contact Feeds', 'gravity-forms-constant-contact'); ?></a></li>
 	        </ul>
+
+<?php 
+        //ensures valid credentials were entered in the settings page
+        if(!get_option('gravity_forms_cc_valid_api')) {
+            _e('<div class="updated" id="message"><p>'.sprintf("To get started, please configure your %sConstant Contact Settings%s.", '<a href="admin.php?page=gf_settings&addon=Constant+Contact">', "</a></p></div>"), "gravity-forms-constant-contact");
+	        return;
+        }
+?>
 
             <form id="feed_form" method="post">
                 <?php wp_nonce_field('list_action', 'gf_constantcontact_list') ?>
@@ -422,7 +469,7 @@ class GFConstantContact {
                                 <?php
                             }
                         }
-                        else if(self::get_api()){
+                        else if(get_option('gravity_forms_cc_valid_api')) {
                             ?>
                             <tr>
                                 <td colspan="4" style="padding:20px;">
@@ -485,11 +532,13 @@ class GFConstantContact {
         $api->password = trim($password);
 		$api->apiPath = str_replace('USERNAME', trim($user), $api->apiPath);
 		$api->actionBy = 'ACTION_BY_CONTACT';
-		$api->requestLogin = $api->apikey.'%'.$user.':'.$password;
+		$api->requestLogin = $api->apikey.'%'.rawurlencode($user).':'.$password;
 		
 		$lists = @$api->getAccountLists();
-
-        return empty($lists) ? false : true;
+		
+		update_option('gravity_forms_cc_valid_api', !empty($lists));
+		
+		return empty($lists) ? false : true;
     }
 
 
@@ -501,9 +550,10 @@ class GFConstantContact {
 
         $api = new CC_SuperClass();
         $api->updateSettings();
-
-        if(!$api || $api->errorCode)
-            return null;
+        
+        if(!$api || $api->errorCode) {
+           return null;
+        }
 
         return $api;
 	}
@@ -528,16 +578,16 @@ class GFConstantContact {
             <h2 style="line-height:71px;"><img alt="<?php _e("Constant Contact", "gravity-forms-constant-contact") ?>" style="float:left; margin-right:10px;" src="<?php echo self::get_base_url() ?>/images/Constant-Contact-Logo-150x71.gif" width="150" height="71" /><?php _e("Constant Contact Feed", "gravity-forms-constant-contact") ?></h2>
 		<div class="clear"></div>
         <?php
-        //getting Constant Contact API
-        $api = self::get_api();
-
-        //ensures valid credentials were entered in the settings page
-        if(!$api){
+	     
+	    //ensures valid credentials were entered in the settings page
+        if(!get_option('gravity_forms_cc_valid_api')) {
             ?>
-            <div><?php echo sprintf(__("We are unable to login to Constant Contact with the provided credentials. Please make sure they are valid in the %sSettings Page%s", "gravity-forms-constant-contact"), "<a href='?page=gf_settings&addon=Constant+Contact'>", "</a>"); ?></div>
+            <div class="error" id="message"><p><?php echo sprintf(__("We are unable to login to Constant Contact with the provided credentials. Please make sure they are valid in the %sSettings Page%s.", "gravity-forms-constant-contact"), "<a href='?page=gf_settings&addon=Constant+Contact'>", "</a>"); ?></p></div>
             <?php
             return;
         }
+
+        $api = self::get_api();
 
         //getting setting id (0 when creating a new one)
         $id = !empty($_POST["constantcontact_setting_id"]) ? $_POST["constantcontact_setting_id"] : absint($_GET["id"]);
@@ -575,7 +625,7 @@ class GFConstantContact {
             $config["meta"]["optin_field_id"] = $config["meta"]["optin_enabled"] ? $_POST["constantcontact_optin_field_id"] : "";
             $config["meta"]["optin_operator"] = $config["meta"]["optin_enabled"] ? $_POST["constantcontact_optin_operator"] : "";
             $config["meta"]["optin_value"] = $config["meta"]["optin_enabled"] ? $_POST["constantcontact_optin_value"] : "";
-
+            
             if($is_valid){
                 $id = GFConstantContactData::update_feed($id, $config["form_id"], $config["is_active"], $config["meta"]);
                 ?>
@@ -990,8 +1040,9 @@ class GFConstantContact {
         
         foreach($feeds as $feed){
             //only export if user has opted in
-            if(self::is_optin($form, $feed))
-                self::export_feed($entry, $form, $feed, $api);
+            if(self::is_optin($form, $feed)) {
+            	self::export_feed($entry, $form, $feed, $api);
+            }
         }
     }
 
@@ -1094,10 +1145,17 @@ class CC_SuperClass extends CC_Utility {
 		$settings = get_option("gf_constantcontact_settings");
 		$object->login = trim($settings['username']);
         $object->password = trim($settings['password']);
-		$object->apiPath = str_replace('USERNAME', '', (string)$object->apiPath).trim($settings['username']);
-		$object->actionBy = 'ACTION_BY_CONTACT';
-		$object->requestLogin = $object->apikey.'%'.$object->login.':'.$object->password;
-		$object->curl_debug = true;
+		$object->apiPath = str_replace('USERNAME', '', (string)$object->apiPath).rawurlencode(trim($settings['username']));
+		
+		$actionBy = apply_filters('gravity_forms_constant_contact_action_by', 'ACTION_BY_CONTACT');
+		if($actionBy === 'ACTION_BY_CONTACT' || $actionBy === 'ACTION_BY_CUSTOMER') {
+	    	$this->actionBy = $actionBy;
+	    } else {
+		    $this->actionBy = 'ACTION_BY_CUSTOMER';
+	    }
+	    		
+		$object->requestLogin = $object->apikey.'%'.rawurlencode($object->login).':'.$object->password;
+		$object->curl_debug = isset($_GET['debug']);
 	}
 	
 	public function listSubscribe($id, $merge_vars, $email_type='html') {

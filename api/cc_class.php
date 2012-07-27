@@ -4,8 +4,9 @@
     * Class that is using REST to communicate with ConstantContact server
  	* This class currently supports actions performed using the contacts, lists, and campaigns APIs
     * @author ConstantContact Dev Team
-    * @version 2.0.0
+    * @version 2.0.1
     * @since 30.03.2010 
+    * @updated 26.07.2012
     */
     class CC_Utility {
            
@@ -21,7 +22,7 @@
         // NOTE - Contact Lists will only be hidden if force_lists is set to true. This is to prevent available checkboxes form being hidden.
                 
         // FORM OPT IN SOURCE - (Who is performing these actions?)
-        var $actionBy = 'ACTION_BY_CUSTOMER'; // Values: ACTION_BY_CUSTOMER or ACTION_BY_CONTACT
+        var $actionBy = 'ACTION_BY_CONTACT'; // Values: ACTION_BY_CUSTOMER or ACTION_BY_CONTACT
         // ACTION_BY_CUSTOMER - Constant Contact Account holder. Used in internal applications.
         // ACTION_BY_CONTACT - Action by Site visitor. Used in web site sign-up forms.
         
@@ -37,10 +38,10 @@
         
         public function __construct() {
             //when the object is getting initialized, the login string must be created as API_KEY%LOGIN:PASSWORD
-            $this->requestLogin = $this->apikey."%".$this->login.":".$this->password;
+            $this->requestLogin = $this->apikey."%".rawurlencode($this->login).":".$this->password;
             $this->apiPath = $this->apiPath.$this->login;
         }         
-        
+                
          /**
          * Method that returns a list with all states found in states.txt file
          * @return array with state codes and state names
@@ -152,6 +153,8 @@
             $return = $this->doServerCall($call);
             $parsedReturn = simplexml_load_string($return);
             $call2 = '';
+            
+            if(empty($parsedReturn) || !(is_object($parsedReturn) || is_array($parsedReturn))) { return false; }
             
             foreach ($parsedReturn->link as $item) {
                 $tmp = $item->Attributes();

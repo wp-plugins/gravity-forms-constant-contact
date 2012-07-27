@@ -1,9 +1,9 @@
 === Gravity Forms Constant Contact Add-on ===
 Tags: gravity forms, forms, gravity, form, crm, gravity form, mail, email, newsletter, Constant Contact, plugin, sidebar, widget, mailing list, API, email marketing, newsletters
 Requires at least: 2.8
-Tested up to: 3.3.1
+Tested up to: 3.4.1
 Stable tag: trunk
-Contributors: katzwebdesign
+Contributors: katzwebdesign, katzwebservices
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms+Constant%20Contact&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
 Add contacts to your Constant Contact mailing list when they submit a <a href="http://www.gravityforms.com?r=gfccreadme" rel="nofollow">Gravity Forms</a> form.
@@ -32,20 +32,34 @@ Integrate your Gravity Forms forms so that when users submit a form entry, the e
 
 == Frequently Asked Questions == 
 
-= Does this plugin require Gravity Forms? =
-This plugin requires the [Gravity Forms plugin](http://www.gravityforms.com/?r=gfccreadme), which is the simply best WordPress contact form plugin. __Don't use Gravity Forms? [Buy the plugin](http://www.gravityforms.com/?r=gfccreadme)__ and start using this add-on plugin!
-
 = Does this plugin require Constant Contact? =
 Yes, it does. If you don't have an Constant Contact account, <a href="http://www.constantcontact.com/index.jsp" rel="nofollow">sign up for an account here</a>.
 
 = What's the license for this plugin? =
 This plugin is released under a GPL license.
 
+= How do I prevent opt-in confirmation emails? =
+
+To disable "Confirmed Opt-in", add this code to your theme's `functions.php` file:
+
+`
+add_filter('gravity_forms_constant_contact_action_by', 'return_action_by_customer');
+function return_action_by_customer() { return 'ACTION_BY_CUSTOMER'; }
+`
+
 == Screenshots ==
 
 1. Users can choose which Constant Contact lists they are added to.
 
 == Upgrade Notice ==
+
+= 2.0.3 =
+* Made it clearer that you need to configure the settings before creating a feed.
+* Plugin now only checks username & password when saved; this prevents accounts being frozen
+* Corrected "Opt-in Source" to be `ACTION_BY_CONTACT`, which is correct. It used to be `ACTION_BY_CUSTOMER`.
+* Added notice when Gravity Forms isn't installed or active
+* Attempted to fix bug where user names with spaces don't connect to the API properly
+* Turned off curl debug for echoing errors on submitted forms. Add `?debug=true` to the page URL to turn back on.
 
 = 2.0.2 =
 * Fixed bug where Custom Fields don't get sent to Constant Contact.
@@ -66,6 +80,14 @@ This plugin is released under a GPL license.
 * No upgrade notice, since this is the first version!
 
 == Changelog ==
+
+= 2.0.3 =
+* Made it clearer that you need to configure the settings before creating a feed.
+* Plugin now only checks username & password when saved; this prevents accounts being frozen
+* Corrected "Opt-in Source" to be `ACTION_BY_CONTACT`, which is correct. It used to be `ACTION_BY_CUSTOMER`.
+* Added notice when Gravity Forms isn't installed or active
+* Attempted to fix bug where user names with spaces don't connect to the API properly
+* Turned off curl debug for echoing errors on submitted forms. Add `?debug=true` to the page URL to turn back on.
 
 = 2.0.2 =
 * Fixed bug where Custom Fields don't get sent to Constant Contact.
