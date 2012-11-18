@@ -13,7 +13,7 @@
         // FROM HERE YOU MAY MODIFY YOUR CREDENTIALS        
         var $login = 'USERNAME'; //Username for your account
         var $password = 'PASSWORD'; //Password for your account
-        var $apikey = 'a9f642af-8f34-43b2-8882-00e6aaebfa46'; // KWS API Key. Do not change.
+        var $apikey = '2300ab97-8374-499e-ae32-11db2f266a9d'; // KWS API Key. Do not change.
         
         // CONTACT LIST OPTIONS
         var $contact_lists = array(); // Define which lists will be available for sign-up.
