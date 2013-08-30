@@ -1,12 +1,12 @@
 === Gravity Forms Constant Contact Add-on ===
 Tags: gravity forms, forms, gravity, form, crm, gravity form, mail, email, newsletter, Constant Contact, plugin, sidebar, widget, mailing list, API, email marketing, newsletters
 Requires at least: 2.8
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: trunk
 Contributors: katzwebdesign, katzwebservices
 Donate link:https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=zackkatz%40gmail%2ecom&item_name=Gravity%20Forms+Constant%20Contact&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 
-Add contacts to your Constant Contact mailing list when they submit a <a href="http://www.gravityforms.com?r=gfccreadme" rel="nofollow">Gravity Forms</a> form.
+Add contacts to your Constant Contact mailing list when they submit a Gravity Forms form.
 
 == Description ==
 
@@ -21,7 +21,7 @@ Integrate your Gravity Forms forms so that when users submit a form entry, the e
 
 * <a href="http://wordpress.org/extend/plugins/gravity-forms-addons/">Gravity Forms Directory & Addons Plugin</a> - Turn Gravity Forms into a directory plugin, and extend the functionality
 
-== Installation == 
+== Installation ==
 1. Upload plugin files to your plugins folder, or install using WordPress' built-in Add New Plugin installer.
 1. Activate the plugin
 1. Go to the plugin settings page (under Forms > Settings > Constant Contact)
@@ -30,7 +30,7 @@ Integrate your Gravity Forms forms so that when users submit a form entry, the e
 1. If the settings are correct, it will say so.
 1. Follow on-screen instructions for integrating with Constant Contact.
 
-== Frequently Asked Questions == 
+== Frequently Asked Questions ==
 
 = Does this plugin require Constant Contact? =
 Yes, it does. If you don't have an Constant Contact account, <a href="http://wordpress.constantcontact.com/index.jsp" rel="nofollow">sign up for an account here</a>.
@@ -47,11 +47,34 @@ add_filter('gravity_forms_constant_contact_action_by', 'return_action_by_custome
 function return_action_by_customer() { return 'ACTION_BY_CUSTOMER'; }
 `
 
+= How do I prevent the Entry notes confirming that the entry was added to Constant Contact? =
+
+To disable this feature, add this code to your theme's `functions.php` file:
+
+`
+add_filter('gravityforms_constant_contact_add_notes_to_entries', '__return_false');
+`
+
+= This plugin uses PressTrends =
+By installing this plugin, you agree to allow gathering anonymous usage stats through PressTrends. The data gathered is the active Theme name, WordPress version, plugins installed, and other metrics. This allows the developer of this plugin to know what compatibility issues to test for.
+
+To remove PressTrends integration, add the code to your theme's functions.php file:
+
+`
+remove_action('plugins_loaded', 'add_presstrends_GravityFormsConstantContact');
+`
+
 == Screenshots ==
 
 1. Users can choose which Constant Contact lists they are added to.
 
 == Upgrade Notice ==
+
+= 2.1 =
+* Fixed: Many PHP notices. This should fix the "spinning" issue when creating a feed with `WP_DEBUG` turned on.
+* Added: Now a note is added to each entry to confirm that the entry was added/updated in Constant Contact.
+* Improved: PHP 5.4 support
+* Improved: Look of the settings page, new CC logo
 
 = 2.0.3 =
 * Made it clearer that you need to configure the settings before creating a feed.
@@ -76,10 +99,16 @@ function return_action_by_customer() { return 'ACTION_BY_CUSTOMER'; }
 * Added list selection capability - allow users to choose which lists they are subscribed to (view the plugin's Installation tab or the Help tab on the Edit Form page to learn more)
 * Improved notices if Gravity Forms or Constant Contact API is not installed or activated
 
-= 1.0 = 
+= 1.0 =
 * No upgrade notice, since this is the first version!
 
 == Changelog ==
+
+= 2.1 =
+* Fixed: Many PHP notices. This should fix the "spinning" issue when creating a feed with `WP_DEBUG` turned on.
+* Added: Now a note is added to each entry to confirm that the entry was added/updated in Constant Contact.
+* Improved: PHP 5.4 support
+* Improved: Look of the settings page, new CC logo
 
 = 2.0.3 =
 * Made it clearer that you need to configure the settings before creating a feed.
@@ -100,7 +129,7 @@ function return_action_by_customer() { return 'ACTION_BY_CUSTOMER'; }
 * Converted to Gravity Forms Add-On Feeds system. If upgrading, <strong>you will need to re-configure your connected forms!</strong>
 * Removed dependence on the <a href="http://wordpress.org/extend/plugins/constant-contact-api/">Constant Contact for WordPress</a> plugin
 
-= 1.1 = 
+= 1.1 =
 * Added list selection capability - allow users to choose which lists they are subscribed to (view the plugin's Installation tab or the Help tab on the Edit Form page to learn more)
 * Improved notices if Gravity Forms or Constant Contact API is not installed or activated
 
