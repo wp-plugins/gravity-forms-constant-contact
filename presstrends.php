@@ -38,7 +38,7 @@
             $plugin_data         = get_plugin_data( __FILE__ );
             $posts_with_comments = $wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->posts WHERE post_type='post' AND comment_count > 0" );
             $data                = array(
-                'url'             => stripslashes( str_replace( array( 'http://', '/', ':' ), '', 'seodenver.com' ) ),
+                'url'             => stripslashes( str_replace( array( 'http://', '/', ':' ), '', site_url() ) ),
                 'posts'           => $count_posts->publish,
                 'pages'           => $count_pages->publish,
                 'comments'        => $comments_count->total_comments,
