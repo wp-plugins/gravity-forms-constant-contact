@@ -1142,9 +1142,16 @@ EOD;
             return false;
     }
 
-    //Returns the url of the plugin's root folder
+    /**
+     * Returns the url of the plugin's root folder
+     * @return string
+     */
     static protected function get_base_url(){
         return plugins_url(null, __FILE__);
+    }
+
+    static public function get_file() {
+        return __FILE__;
     }
 
     //Returns the physical path of the plugin's root folder
